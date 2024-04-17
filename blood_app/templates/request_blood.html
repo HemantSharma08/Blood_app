@@ -1,0 +1,219 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+  body {font-family: Arial, Helvetica, sans-serif;}
+  
+  /* The Modal (background) */
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    margin-top:6%;
+    padding: 0;
+    border: 1px solid #888;
+    width: 60%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* The Close Button */
+  .close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    padding: 4px 16px;
+    background-color: #fff;
+    
+  }
+  
+  .modal-body {padding: 2px 16px;}
+  
+  .modal-footer {
+    padding: 2px 16px;
+    background-color: #fff;
+    
+  }
+  </style>
+
+<div class="container-fluid" style="width:90%;margin-top:10%">
+                    <div class="container-fluid">
+                          <a href="/request_blood?action=Pending">
+                            <button type="button" class="btn btn-primary pull-left">Pending</button>
+                          </a>
+                            
+                          <h1 align="center" style="font-weight:bold;font-family : 'Monotype Corsiva' ; color : #E6120E ;margin-top:4%">
+                            {% if request.GET.action %} {{request.GET.action}} {% else %} All{% endif %} Request for Blood
+                              
+                          <a href="/request_blood?action=Approved">    
+                            <button type="button" class="btn btn-primary pull-right">Approved</button>
+                          </a>
+                          <!-- The Modal -->
+                          
+
+                        </h1>
+                        <div id="myModal" class="modal">
+                          
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h2>Request for blood</h2>
+                              <span class="close">&times;</span>
+                              
+                            </div>
+                            <div class="modal-body">
+                              <div class="login px-sm-12" style="width:100%">
+                                <form action="{% if doctor %}/change_doctor/{{doctor.id}}/{% else %}/add_doctor{% endif %}" method="post" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  
+                                  <div class="form-group row">
+                                    <div class="col-md-6">
+                                                    <label>Username</label>
+                                                    <input type="text" class="form-control" name="username" placeholder="Username" value="{{request.user.username}}" required readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                                    <label>Email</label>
+                                                    <input type="email" class="form-control" name="email" placeholder="Enter Email" required="" value="{{request.user.email}}" readonly>
+                                                </div>
+                                  </div>
+                                  
+                                  <div class="form-group row">
+                                    <div class="col-md-6">
+                                                    <label>Blood Group</label>
+                                                    <select name="group" class="form-control" style="margin-right:4%" required="">
+                                                      <option>Choose your blood group</option>
+                                                      {% for i in cat %}
+                                                      <option value="{{i.id}}">{{i.name}}</option>
+                                                      {% endfor %}
+                                                    </select>
+                                    </div>
+                                                <div class="col-md-6">
+                                                    <label>Place</label>
+                                                    <input type="text" class="form-control" name="place" placeholder="Enter Place" required>
+                                    </div>
+                                  </div>
+                                            <br>
+                                  <div class="form-group row">
+                                    <div class="col-md-12">
+                                                    <input type="checkbox" name="mycheck" id="mycheck" required>
+                                                    <label class="mb-2">I certify that the information I am about to provided is true and complete to
+                                                        the best of my knowledge. I am aware that this self declaration statement is
+                                                        subject to review and verification and if such information has been falsified I
+                                                        may be terminated from this organisation.</label>
+                                    </div>
+                                  </div>
+                                  
+                                  <button type="submit" class="btn btn-primary submit mt-4 pull-right">Register</button>
+                                </form>
+                              </div>
+                            </div>
+                            
+                          </div>
+                        
+                        </div>
+                         </div><hr>
+                                <table id="example" class="display" style="width:100%">
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Request Date</th>
+                                      <th>Name</th>
+                                      <th>Email</th>
+                                      <th>Mobile</th>
+                                      <th>Blood Group</th>
+                                      <th>Address</th>
+                                      <th>Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              {% for i in data %}
+                                <tr>
+                                  <td>{{forloop.counter}}</td>
+                                  <td>{{i.created}}</td>
+                                  <td>{{i.user.user.first_name}} {{i.user.user.last_name}}</td>
+                                  <td>{{i.user.user.email}}</td>
+                                  <td>{{i.user.contact}}</td>
+                                  <td>{{i.blood_group}}</td>
+                                  <td>{{i.place}}</td>
+                                  <td>
+                                    <a href="/change_status/{{i.id}}/?data={{request.get_full_path}}">
+                                      <button type="button" class="btn btn-primary">{% if i.status == "Approved" %}Approved{% else %}Pending{% endif %}</button>
+                                    </a>
+                                  </td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+
+
+<script>
+                    // Get the modal
+                    var modal = document.getElementById("myModal");
+                    
+                    // Get the button that opens the modal
+                    var btn = document.getElementById("myBtn");
+                    
+                    // Get the <span> element that closes the modal
+                    var span = document.getElementsByClassName("close")[0];
+                    
+                    // When the user clicks the button, open the modal 
+                    btn.onclick = function() {
+                      modal.style.display = "block";
+                    }
+                    
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function() {
+                      modal.style.display = "none";
+                    }
+                    
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function(event) {
+                      if (event.target == modal) {
+                        modal.style.display = "none";
+                      }
+                    }
+                    </script>
+
+
+{% endblock %}

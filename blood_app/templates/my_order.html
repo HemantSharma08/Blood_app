@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container-fluid" style="width:90%;margin-top:8%">
+                    <div class="container-fluid">
+                        <h1 align="center" style="font-weight:bold;font-family : 'Monotype Corsiva' ; color : #E6120E ;margin-top:4%">View My Order</h1>
+                         </div><hr>
+                                <table id="example" class="display" style="width:100%">
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Full Name</th>
+                                      <th>Email</th>
+                                      <th>Contact</th>
+                                      <th>Blood Group</th>
+                                      <th>Order date</th>
+                                      <th>Status</th>
+                                      <th>Action</th>
+
+                                  </tr>
+                              </thead>
+                              <tbody>
+                              {% for i in data %}
+                                <tr>
+                                  <td>{{forloop.counter}}</td>
+                                  <td>{{i.user.user.first_name}} {{i.user.user.last_name}}</td>
+                                  <td>{{i.user.user.email}}</td>
+                                  <td>{{i.user.contact}}</td>
+                                  <td>{{i.blood_donation.blood_group.name}}</td>
+                                  <td>{{i.created}}</td>
+                                    <td>{{i.status}}
+                                  </td>
+                                    
+
+                                    <td style="width:150px">
+                                      <a href="{% url 'delete_order' i.id %}" ><button class="btn btn-danger" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i></button></a></td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+
+{% endblock %}

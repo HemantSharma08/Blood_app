@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block body %}
+	<!-- register -->
+{% if error == "create" %}
+<script>
+    alert('Add a new Doctor Successfully');
+    window.location="{% url 'view_doctor' %}";
+</script>
+{% endif %}
+
+
+	<section class="logins py-5">
+		<div class="container py-xl-5 py-lg-3">
+			<div class="title-section mb-md-5 mb-4">
+				<h6 class="w3ls-title-sub"></h6>
+				<h3 class="w3ls-title text-uppercase text-dark font-weight-bold">Register for blood Donation</h3>
+			</div><hr/>
+			<div class="login px-sm-12" style="width:100%">
+				<form action="" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					
+					<div class="form-group row">
+						<div class="col-md-6">
+                            <label>Username</label>
+                            <input type="text" class="form-control" name="username" placeholder="Username" value="{{request.user.username}}" required readonly>
+						</div>
+						<div class="col-md-6">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="Enter Email" required="" value="{{request.user.email}}" readonly>
+                        </div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="col-md-6">
+                            <label>Blood Group</label>
+                            <select name="group" class="form-control" style="margin-right:4%" required="">
+								<option>Choose your blood group</option>
+								{% for i in cat %}
+								<option value="{{i.id}}">{{i.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+                        <div class="col-md-6">
+                            <label>Place</label>
+                            <input type="text" class="form-control" name="place" placeholder="Enter Place" required>
+						</div>
+					</div>
+                    <br>
+					<div class="form-group row">
+						<div class="col-md-12">
+                            <input type="checkbox" name="mycheck" id="mycheck" required>
+                            <label class="mb-2">I certify that the information I am about to provided is true and complete to
+                                the best of my knowledge. I am aware that this self declaration statement is
+                                subject to review and verification and if such information has been falsified I
+                                may be terminated from this organisation.</label>
+						</div>
+					</div>
+					
+					<button type="submit" class="btn btn-primary submit mt-4">Register</button>
+				</form>
+			</div>
+		</div>
+	</section>
+	<!-- //register -->
+
+
+
+{% endblock %}
