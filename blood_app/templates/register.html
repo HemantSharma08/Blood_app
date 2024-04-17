@@ -63,7 +63,7 @@
 						<label>Blood Group</label>
 						<div class="form-control">
 							<select name="group" class="form-control" style="margin-right:4%" required="">
-								<option>Choose your blood group</option>
+								<option value="" disabled selected>Choose your blood group</option>
 								{% for i in cat %}
 								<option value="{{i.id}}">{{i.name}}</option>
 								{% endfor %}
